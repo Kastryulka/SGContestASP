@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using System.Text;
+using testASPCoreMVC_2.Areas.Admin.Models;
+using testASPCoreMVC_2.Enums;
 
 namespace testASPCoreMVC_2.Utils
 {
@@ -9,6 +11,8 @@ namespace testASPCoreMVC_2.Utils
         //static HttpClient httpClient = new HttpClient();
         public string _getUserInfoEndpoint = "http://localhost:57888/api/get_user_info";
         public string _getCoursesDataEndpoint = "http://localhost:57888/api/get_courses_data";
+        public string _getLastResultEndpoint = "http://localhost:57888/api/get_message_result";
+        public string _testEndpoint = "http://localhost:57888/api/add_message";
 
         public async Task<String> getUsersAsync() {
             string json = JsonConvert.SerializeObject(new { user_name = "*" });
@@ -20,9 +24,31 @@ namespace testASPCoreMVC_2.Utils
             return sendPost(_getUserInfoEndpoint, json);
         }
 
-        public async Task<String> getProblemsAsync(){
+        public async Task<String> getProblemsAsync(){            
             string json = JsonConvert.SerializeObject(new { id = 1, mqtt_key = "234", user = "2321", type = "problems", data_key = "test", action = "get_data" });
             return sendPost(_getCoursesDataEndpoint, json);
+        }
+
+        public async Task<String> sendCodeToTestServerAsync(String testId, String username, int problemNumber, String languageString, String courseNumber, String variantNumber, String codeString)
+        {
+            
+            string json = JsonConvert.SerializeObject(new 
+            { 
+                id = testId, mqtt_key = "234", user = username, 
+                language = languageString, course = courseNumber, action = "test_problem", 
+                problem = problemNumber, variant = variantNumber, code = codeString
+            });
+            /*{
+                'id': id, 'mqtt_key': mqtt_key, 'user': self.user,
+                    'language': language, 'course': course, 'action': 'test_problem',
+                    'problem': self.get_problem_number(self.user_data["test"][problem - 1]), 'variant': variant, 'code': code}*/
+            return sendPost(_testEndpoint, json);
+        }
+
+        public async Task<String> getLastResultAsync(String testId)
+        {
+            string json = JsonConvert.SerializeObject(new { id = testId });
+            return sendPost(_getLastResultEndpoint, json);
         }
 
         /*public static async Task<HttpResponseMessage> getProblemsAsync()

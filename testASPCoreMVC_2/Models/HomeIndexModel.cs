@@ -6,6 +6,7 @@ namespace testASPCoreMVC_2.Models
     public class HomeIndexModel
     {
         public string User { get; set; }
+        public string filePath { get; set; }
         public Languages languages;
         public Courses courses;
         public int currentProblem;

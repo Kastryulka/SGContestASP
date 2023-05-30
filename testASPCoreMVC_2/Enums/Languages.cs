@@ -5,12 +5,12 @@
     public enum Languages
     {
         [Display(Name = "python3")]
-        Python,
+        python,
         [Display(Name = "c#")]
-        CS,
+        cs,
         [Display(Name = "c")]
-        C,
+        c,
         [Display(Name = "c++")]
-        CPP
+        cpp
     }
 }

@@ -5,11 +5,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Система тестирования</h1>
-    <p>Введите имя студента в системе: </p>
-    <form method="post">
-        <input name="studentNameInput" value="@Model.User" />
-        <p><button id="solveBtn" type="submit" asp-action="Index">Проверить</button></p>
-    </form>
+    
     
 </div>
 
@@ -18,11 +14,20 @@
     @using (Html.BeginForm("Test", "Home", FormMethod.Post))
     {
         <h1 class="display-6">Данные</h1>
-        <form method="post">
-        <table class="center">
+        <form method="post" enctype="multipart/form-data">
+        <div class="text-center">
+            <p>Введите имя студента в системе: </p>
+            <fieldset name="userFields">
+                <input name="studentNameInput" value="@Model.User" />
+                <p><button id="solveBtn" type="submit" asp-action="Index">Проверить</button></p>
+            </fieldset>
+        </div>
+            
+            <table class="center">
             <tr>
+
                 <td><p>Язык программирования: </p></td>
-                <td><p>@Html.DropDownList("LanguagesDD", Html.GetEnumSelectList(typeof(Languages)))</p></td>
+                    <td><p>@Html.DropDownList("LanguagesDD", Html.GetEnumSelectList(typeof(Languages)), @Model.languages)</p></td>
             </tr>
             <tr>
                 <td><p>Код учебного курса:  </p></td>
@@ -37,15 +42,23 @@
                 <td><p>Вариант:  </p></td>
                 <td><p>1</p></td>
             </tr>
+            <tr>
+                    <td><p><input name="filePath" value="@Model.filePath" /></p></td>
+            </tr>
+                
         </table>
+            <!--<td><input type="file" name="uploads" /><br></td> -->
         <br />
             <p class="text-center"><button id="loadBtn" type="submit" asp-action="Test">Загрузить код</button></p>
+            
         </form>
         <br />
         <h1 class="display-6">Вывод</h1>
         <p>@ViewBag.Message</p>
         <table class="table table-striped table-hover">
             <tr border="1">
+                <td>Номер</td>
+                <td>Варианты</td>
                 <td>Сложность</td>
                 <td>Описание</td>
             </tr>
@@ -54,6 +67,8 @@
                 foreach (var problem in Model.tests)
                 {
                     <tr>
+                        <td>@problem.Variants.ElementAt(0).Key</td>
+                        <td>@problem.getVariants()</td>
                         <td>@problem.Rating</td>
                         <td>@problem.Task</td>
                     </tr>
